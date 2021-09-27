@@ -1,9 +1,17 @@
 ---
 - hosts: ubuntu-desktop
+  vars_file:
+    - config.yml
+  vars:
+    home_dir: "/home/{{user}}/"
   tasks:
     - name: install base packages
       apt:
         name: "{{item}}"
-      loop:
-        - git
-        - make
+      loop: [git, make]
+    - name: create home dir file structure
+      file:
+        path: "{{home_dir}}/{{item}}"
+        state: directory
+      loop: [Data, Downloads, Installs, Notes, Repos, Scripts]
+    - name: clone dotfiles

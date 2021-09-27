@@ -1,0 +1,12 @@
+---
+- hosts: debian-webserver
+  vars:
+    dev_username: dev
+  tasks:
+    - name: install essential packages
+      # ...
+    - name: create dev user
+      # ...
+    - name: configure bash
+      # ...
+    - name: configure vim

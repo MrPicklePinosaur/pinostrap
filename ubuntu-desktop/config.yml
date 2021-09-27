@@ -1,0 +1,4 @@
+user: pinosaur
+dotfiles:
+  - .vimrc
+  - .bashrc
