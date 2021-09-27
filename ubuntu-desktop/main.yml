@@ -1,0 +1,9 @@
+---
+- hosts: ubuntu-desktop
+  tasks:
+    - name: install base packages
+      apt:
+        name: "{{item}}"
+      loop:
+        - git
+        - make
