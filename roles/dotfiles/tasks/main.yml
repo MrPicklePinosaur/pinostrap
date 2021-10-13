@@ -1,11 +1,28 @@
 ---
 - name: make sure all required programs are installed
-  # ...
+  apt:
+    name: git
+    state: present
+- name: find user's home dir
+  user:
+    name: {{remote_user}}
+  register: _remote_user
 - name: create bare git repo
-  command: git init --bare ~/.dotfiles
-- name: configure dotfiles repo
+  git:
+    repo: "{{dotfiles_remote}}"
+    remote: github
+    bare: yes
+    dest: "{{_remote_user.home}}/{{dotfiles_repo}}"
+- name: configure git settings
   # ...
-- name: create sparecheckout file
-  # ...
+- name: copy sparse-checkout file
+  file:
+    src: "{{role_path}}/files/sparse-checkout"
+    dest: "{{_remote_user.home}}/{{dotfiles_repo}}/info/sparse-checkout"
 - name: pull in files
   # ...
+- name: done
+  debug:
+    msg:
+      - "for QOL, add this to your .bashrc (or equivalent)"
+      - "  alias dotfiles='git --git-dir=$HOME/{{dotfiles_repo}} --work-tree=$HOME'"
