@@ -3,9 +3,10 @@
   apt:
     name: git
     state: present
+  become: yes
 - name: find user's home dir
   user:
-    name: {{remote_user}}
+    name: "{{ansible_user}}"
   register: _remote_user
 - name: create bare git repo
   git:
@@ -13,14 +14,32 @@
     remote: github
     bare: yes
     dest: "{{_remote_user.home}}/{{dotfiles_repo}}"
-- name: configure git settings
-  # ...
+# find a better solution for aliasing the git commands
+- name: configure git settings (set untracked files)
+  shell:
+    cmd: "git --git-dir=$HOME/{{dotfiles_repo}} --work-tree=$HOME \
+          config --local status.showUntrackedFiles no"
+- name: configure git settings (set sparse)
+  shell:
+    cmd: "git --git-dir=$HOME/{{dotfiles_repo}} --work-tree=$HOME \
+          config --local core.sparsecheckout true"
 - name: copy sparse-checkout file
-  file:
+  copy:
     src: "{{role_path}}/files/sparse-checkout"
     dest: "{{_remote_user.home}}/{{dotfiles_repo}}/info/sparse-checkout"
+# not sure if necessary - need to double check the commands below
 - name: pull in files
-  # ...
+  shell:
+    cmd: "git --git-dir=$HOME/{{dotfiles_repo}} --work-tree=$HOME \
+         pull github master"
+- name: read dotfiles tree
+  shell:
+    cmd: "git --git-dir=$HOME/{{dotfiles_repo}} --work-tree=$HOME \
+         read-tree -m -u HEAD"
+- name: reset dotfiles repo
+  shell:
+    cmd: "git --git-dir=$HOME/{{dotfiles_repo}} --work-tree=$HOME \
+         reset --hard github/master"
 - name: done
   debug:
     msg:

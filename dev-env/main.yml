@@ -1,0 +1,6 @@
+---
+- hosts: dev-env
+  tasks:
+    - name: install dotfiles
+      import_role:
+        name: ../roles/dotfiles

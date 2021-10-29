@@ -1,0 +1,11 @@
+[ubuntu-desktop]
+
+[debian-webserver]
+
+[dev-env]
+
+[dev-env:vars]
+ansible_connection=ssh
+ansible_port=22
+ansible_user=root
+ansible_password=root-pass
