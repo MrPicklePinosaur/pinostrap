@@ -1,0 +1,8 @@
+---
+- name: make sure all required programs are installed
+  apt:
+    name: lxd
+    state: present
+  become: yes
+- name: add self to lxc group
+  # ...

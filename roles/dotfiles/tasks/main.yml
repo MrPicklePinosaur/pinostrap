@@ -28,6 +28,10 @@
     src: "{{role_path}}/files/sparse-checkout"
     dest: "{{_remote_user.home}}/{{dotfiles_repo}}/info/sparse-checkout"
 # not sure if necessary - need to double check the commands below
+- name: stash previous configs for now
+  shell:
+    cmd: "git --git-dir=$HOME/{{dotfiles_repo}} --work-tree=$HOME \
+         stash"
 - name: pull in files
   shell:
     cmd: "git --git-dir=$HOME/{{dotfiles_repo}} --work-tree=$HOME \

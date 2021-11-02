@@ -2,11 +2,20 @@
 - hosts: debian-webserver
   vars:
     dev_username: dev
+    # todo actually set user password
+    dev_password: ""
   tasks:
-    - name: install essential packages
+    # - name: install essential packages
       # ...
+    # vvv need to figure this out (create user as root, and then drop to user privileges) vvv
     - name: create dev user
-      # ...
-    - name: configure bash
-      # ...
-    - name: configure vim
+      user:
+        name: "{{ dev_username }}"
+        shell: /bin/bash
+        groups: sudo
+        append: yes
+        create_home: yes
+        state: present
+    - name: pull in config files
+      import_role:
+        name: ../roles/dotfiles
