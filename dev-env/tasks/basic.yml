@@ -1,0 +1,17 @@
+---
+# basic dev user creation + essential dev packages
+- name: create dev user with sudo
+  user:
+    name: "{{dev_username}}"
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+    create_home: yes
+    state: present
+- name: install basic packages
+  apt:
+    update_cache: yes
+    pkg:
+      - git
+      - python3-pip
+      - vim

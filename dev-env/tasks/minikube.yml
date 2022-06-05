@@ -1,0 +1,9 @@
+---
+# setup local dev env for k8s stuff
+- name: install k8s dev packages (minikube, kubectl, helm)
+  package:
+    name:
+      - minikube
+      - kubectl
+      - helm
+    state: present

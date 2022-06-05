@@ -1,0 +1,55 @@
+---
+# install docker and dockre compose (debian)
+- name: install pip dependencies
+  pip:
+    name:
+      - docker
+      - docker-compose
+
+- name: install docker dependencies
+  apt:
+    update-cache: yes
+    pkg:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg2
+      - software-properties-common 
+- name: add gpg key for docker repo
+  apt_key:
+    url: https://download.docker.com/linux/debian/gpg
+    state: present
+- name: add to apt sources
+  apt_repository:
+    repo: deb https://download.docker.com/linux/debian bullseye stable
+    state: present
+- name: install docker
+  apt:
+    name: docker-ce
+    update_cache: yes
+    state: present
+- name: add dev user to docker group
+  user:
+    name: "{{dev_username}}"
+    groups: docker
+    append: yes
+- name: start and enable docker service
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: install compose
+  uri:
+    url: "https://github.com/docker/compose/releases/download/{{compose_version}}/docker-compose-linux-x86_64"
+    dest: /usr/local/bin/docker-compose
+    creates: /usr/local/bin/docker-compose
+    owner: root
+    group: root
+    mode: 755
+
+- name: create docker network
+  docker_network:
+    name: "{{docker_network}}"
+    driver: bridge
+

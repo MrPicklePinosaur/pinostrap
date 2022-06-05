@@ -1,6 +1,9 @@
 ---
 - hosts: dev-env
   tasks:
-    - name: install dotfiles
-      import_role:
-        name: ../roles/dotfiles
+    - include_tasks: "{{playbook_dir}}/tasks/{{item}}.yml"
+      loop:
+ 
+    # - name: install dotfiles
+    #   import_role:
+    #     name: ../roles/dotfiles

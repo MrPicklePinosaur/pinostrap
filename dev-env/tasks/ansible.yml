@@ -1,0 +1,11 @@
+---
+# install ansible
+- name: install basic packages
+  apt:
+    update_cache: yes
+    pkg:
+      - ansible
+- name: install ansible community
+  command: ansible-galaxy collection install community.general
+- name: install ansible docker
+  command: ansible-galaxy collection install community.docker
